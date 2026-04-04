@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GSMS - Dashboard</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,600,700" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image: url('home.png');
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Card styles for dashboard */
+        .dashboard-card {
+            background: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .dashboard-card h3 {
+            margin: 0;
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .dashboard-card .number {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #007bff;
+        }
+        
+        .box-info {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .navbar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        
+        .navbar-nav li {
+            margin-right: 20px;
+        }
+        
+        .navbar-nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px;
+        }
+        
+        .navbar-nav a:hover {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <!-- Navigation -->
+    <div class="header">
+        <div class="navbar navbar-default">
+            <div class="container-fluid">
+                <ul class="nav navbar-nav">
+                    <li>
+                      <a href="index.html">
+                          <i class="fa fa-home"></i>index
+                      </a>
+                  </li>
+                  <li>
+                      <a href="manage_products.html">
+                          <i class="fa fa-shopping-cart"></i> Products
+                      </a>
+                  </li>
+                  <li>
+                      <a href="orders.html">
+                          <i class="fa fa-truck"></i> Orders
+                      </a>
+                  </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard Title -->
+    <h1>Dashboard</h1>
+    
+    <!-- Stats Cards Row -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h3>Total Products</h3>
+                <div class="number" id="totalProducts">0</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h3>Total Inventory Value</h3>
+                <div class="number" id="totalValue">$0</div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="dashboard-card">
+                <h3>Low Stock Items</h3>
+                <div class="number" id="lowStock">0</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+          <div class="dashboard-card">
+              <h3>Total Stock</h3>
+            <div class="number" id="totalstock">0</div>
+          </div>
+        </div>  
+    </div>
+    </div>
+    
+    <!-- Recent Products Section -->
+    <div class="box-info">
+        <h3>Recent Products</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Unit</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody id="recentProductsList">
+                <tr>
+                    <td colspan="4" style="text-align: center;">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Dashboard JavaScript -->
+<script>
+    // This function loads products from localStorage and updates the dashboard
+    function loadDashboard() {
+        // Get products from localStorage
+        const stored = localStorage.getItem('products');
+        let products = [];
+        
+        if (stored) {
+            products = JSON.parse(stored);
+        }
+        
+        // Update Total Products
+        const totalProducts = products.length;
+        document.getElementById('totalProducts').innerHTML = totalProducts;
+        
+        // Calculate Total Inventory Value (sum of all product prices)
+        let totalValue = 0;
+        for (let i = 0; i < products.length; i++) {
+            totalValue = totalValue + products[i].price;
+        }
+        // Calculate Total Stock (sum of all stock quantities)
+        let totalStock = 0;
+        for (let i = 0; i < products.length; i++) {
+          totalStock = totalStock + (products[i].stock || 0);
+}
+        document.getElementById('totalstock').innerHTML = totalStock;
+        document.getElementById('totalValue').innerHTML = '$' + totalValue.toFixed(2);
+        
+        // Count Low Stock Items (less than 5 items - we'll add stock later)
+        // For now, just count products with price less than $5 as example
+        let lowStockCount = 0;
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].stock && products[i].stock < 5) { 
+                lowStockCount++;
+            }
+        }
+        document.getElementById('lowStock').innerHTML = lowStockCount;
+        
+        // Display Recent Products (last 5)
+        const recentProducts = products.slice(-5); // Get last 5 products
+        const tbody = document.getElementById('recentProductsList');
+        tbody.innerHTML = '';
+        
+        if (recentProducts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">No products found. Add some products first!</td></tr>';
+        } else {
+            for (let i = 0; i < recentProducts.length; i++) {
+                const product = recentProducts[i];
+                const row = tbody.insertRow();
+                row.insertCell(0).textContent = product.name;
+                row.insertCell(1).textContent = product.unit;
+                row.insertCell(2).textContent = '$' + product.price.toFixed(2);
+                row.insertCell(3).textContent = product.stock || 0;   
+            }
+        }
+    }
+    
+    // Load dashboard when page opens
+    loadDashboard();
+</script>
+
+</body>
+</html>

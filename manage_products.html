@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GSMS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,300,600,700">
+    
+    <!-- Replace local CSS with CDN links -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Create a simple fallback style -->
+    <style>
+        
+        .body {
+        font-family: 'Roboto', sans-serif;
+        background-image: url('wallpaper.jpg');
+        background-color: transparent !important;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        padding: 20px;
+                 }
+
+        html, body {
+        background-image: url('wallpaper.jpg') !important;
+        background-size: cover !important;
+        background-position: center !important;
+        background-attachment: fixed !important;
+        margin: 0;
+        padding: 0;
+                  }
+
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: transparent;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .header {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .button-menu-mobile {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .content-page {
+            padding: 20px;
+        }
+        .box-info {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .btn {
+            margin: 5px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: black;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-dialog {
+            margin: 50px auto;
+            width: 500px;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 5px;
+        }
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        .modal-footer {
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            text-align: right;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .pull-right {
+            float: right;
+        }
+        .mb-4 {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body class="tooltips">
+<div class="container">
+
+    <div class="header content rows-content-header">
+        <button class="button-menu-mobile show-sidebar">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav visible-lg visible-md limit-chars">
+                        <li>
+                            <a href="index.html">
+                                <i class="fa fa-home"></i>index
+                            </a>
+                        </li>
+                        <li>
+                            <a href="manage_products.html">
+                                <i class="fa fa-shopping-cart"></i> Products
+                            </a>
+                        </li>
+                        <li>
+                            <a href="orders.html">
+                                <i class="fa fa-truck"></i> Orders
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="right content-page">
+        <div class="body content rows scroll-y">
+            <div class="box-info full" id="taskFormContainer">
+                <h2>Manage Products</h2>
+                <div class="panel-body pt-0">
+                    <div class="row mb-4">
+                        <div class="col-sm-12">
+                            <button type="button" class="btn btn-primary pull-right" onclick="openModal()">
+                                Add New Product
+                            </button>
+                        </div>
+                    </div>
+                    <table class="table table-bordered" id="productTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Price Per Unit</th>
+                                <th>Stock Quantity</th>
+                                <th style="width: 150px">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productList">
+                            <!-- Products will appear here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="productModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Product</h4>
+                <button type="button" onclick="closeModal()" style="float: right;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" name="id" id="id" value="0">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input class="form-control" placeholder="Name" name="name" id="name" type="text" value="" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label> Unit</label>
+                                <select name="uoms" id="uoms" class="form-control" required>
+                                    <option value="">Select Unit</option>
+                                    <option value="kg">Kilogram (kg)</option>
+                                    <option value="g">Gram (g)</option>
+                                    <option value="liter">Liter (L)</option>
+                                    <option value="ml">Milliliter (ml)</option>
+                                    <option value="piece">Piece (pc)</option>
+                                    <option value="dozen">Dozen</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Price Per Unit</label>
+                                <input class="form-control" placeholder="Price Per Unit" name="price" id="price" type="number" step="0.01" value="" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                             <div class="form-group">
+                                <label>Stock Quantity</label>
+                                <input class="form-control" placeholder="Stock Quantity" name="stock" id="stock" type="number" value="0" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+                <button type="button" class="btn btn-primary" id="saveProduct" onclick="saveProduct()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="manage_products.js"></script>
+</body>
+</html>
