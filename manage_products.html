@@ -202,6 +202,24 @@
         .mb-4 {
             margin-bottom: 20px;
         }
+        .navbar-nav {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.navbar-nav li {
+    display: block !important;
+}
+
+@media (min-width: 768px) {
+    .navbar-nav {
+        float: left;
+        margin: 0;
+    }
+    .navbar-nav > li {
+        float: left;
+    }
+}
     </style>
 </head>
 <body class="tooltips">
